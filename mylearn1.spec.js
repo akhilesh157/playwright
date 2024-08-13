@@ -44,13 +44,13 @@ test("yt-video",async({page})=>{
   //'*/**/api/v1/fruits'
 
 
-import { test, expect } from '@playwright/test';
+// import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }, testInfo) => {
-  testInfo.setTimeout(testInfo.timeout + 30000); // Extend the test timeout by 30 seconds.
-});
+// test.beforeEach(async ({ page }, testInfo) => {
+//   testInfo.setTimeout(testInfo.timeout + 30000); // Extend the test timeout by 30 seconds.
+// });
 
-test('example test', async ({ page }) => {
-  await page.goto('https://wipro.techademy.com/login');
-  await expect(page.locator('text=Forgot Password')).toBeVisible({ timeout: 30000 }); // Expect timeout of 10 seconds.
-});
+// test('example test', async ({ page }) => {
+//   await page.goto('https://wipro.techademy.com/login');
+//   await expect(page.locator('text=Forgot Password')).toBeVisible({ timeout: 30000 }); // Expect timeout of 10 seconds.
+// });
