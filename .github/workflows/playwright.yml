@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 jobs:
   playwright-tests:
     timeout-minutes: 60
@@ -22,14 +22,42 @@ jobs:
       run: npm ci
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
-
+ 
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-
+      working-directory: tests  # Navigate to the tests folder
+ 
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: blob-report-${{ matrix.shardIndex }}
-        path: blob-report
+        path: tests/blob-report  # Path should include the correct directory
         retention-days: 1
+
+  merge-report:
+    if: ${{ !cancelled() }}
+    needs: [playwright-tests]
+ 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Download blob reports from github actions artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: tests/blob-report  # Ensure path matches where blob reports are stored
+          pattern: blob-report-*
+          merge-multiple: true
+ 
+      - name: Merge into HTML reports
+        run: npx playwright merge-reports --reporter html ./tests/blob-report
+ 
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report--attempt-${{ github.run_attempt }}
+          path: tests/playwright-report  # Ensure path matches where HTML report is saved
+          retention-days: 10
