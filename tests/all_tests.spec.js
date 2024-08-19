@@ -134,8 +134,3 @@ test("15-screenshot_check",async({page})=>{
     await page.goto("https://www.onlineshopdemo.co.uk/");
     await page.screenshot({ path: 'screenshot.png' });
 })
-
-test("15-screenshot_check",async({page})=>{
-    await page.goto("https://www.onlineshopdemo.co.uk/");
-    await page.screenshot({ path: 'screenshot.png' });
-})
