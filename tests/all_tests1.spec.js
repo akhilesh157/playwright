@@ -30,3 +30,8 @@ test('5-sale-clicking',async({page})=>{
     await expect(page).toHaveURL("https://www.onlineshopdemo.co.uk/product-tag/sale/")
 })
 
+test('55-clicking',async({page})=>{
+    await page.goto("https://www.onlineshopdemo.co.uk/my-account/")
+    const sale_option= await page.locator(".jet-menu-title").filter({ hasText: 'Sale' }).click()
+    await expect(page).toHaveURL("https://www.onlineshopdemo.co.uk/product-tag/sale/")
+})
