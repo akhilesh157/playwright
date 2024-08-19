@@ -24,16 +24,14 @@ jobs:
       run: npm ci
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
-
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-
-    - name: Upload blob report to GitHub Actions Artifacts
+    - name: Upload test results to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: blob-report-${{ matrix.shardIndex }}
-        path: ./blob-report
+        path: ./  # Assuming the report.jsonl is generated in the root of the workspace
         retention-days: 1
 
   merge-report:
@@ -45,36 +43,28 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 18
-    
     - name: Clean npm cache
       run: npm cache clean --force
-
     - name: Install Dependencies Again
       run: npm ci
-
     - name: Install Playwright
       run: npx playwright install --with-deps
-    
-    - name: Download blob reports from GitHub Actions artifacts
+    - name: Download test results from GitHub Actions artifacts
       uses: actions/download-artifact@v4
       with:
         path: ./blob-reports
         pattern: blob-report-*
         merge-multiple: true
-
     - name: List Blob Reports Contents
       run: ls -al ./blob-reports
-
     - name: Merge into HTML reports
       run: npx playwright merge-reports --reporter=html --output=playwright-report ./blob-reports
-
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
         name: html-report--attempt-${{ github.run_attempt }}
         path: playwright-report
         retention-days: 10
-
     - name: Output npm debug log
       if: failure()
       run: cat /home/runner/.npm/_logs/*.log
