@@ -15,7 +15,7 @@ test('2-url_check',async({page})=>{
 test('3-search_check',async({page})=>{
     await page.goto("https://www.onlineshopdemo.co.uk/");
     const search_icon= await page.locator(".elementor-icon")
-    await expectn(search_icon).toBeTruthy()
+    await expect(search_icon).toBeTruthy()
 })
 
 test('4-heading_check',async({page})=>{
