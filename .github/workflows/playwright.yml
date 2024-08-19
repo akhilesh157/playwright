@@ -1,10 +1,12 @@
 name: Playwright Tests
 
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 
 jobs:
   playwright-tests:
@@ -24,10 +26,12 @@ jobs:
       run: npm ci
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
- 
+
+
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
- 
+
+
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
@@ -35,6 +39,7 @@ jobs:
         name: blob-report-${{ matrix.shardIndex }}
         path: blob-report
         retention-days: 1
+
 
   merge-reports:
     if: ${{ !cancelled() }}
@@ -50,6 +55,7 @@ jobs:
     - name: Install Playwright
       run: npx playwright install --with-deps
 
+
     - name: Download blob reports from GitHub Actions Artifacts
       uses: actions/download-artifact@v4
       with:
@@ -57,15 +63,32 @@ jobs:
         pattern: blob-report-*
         merge-multiple: true
 
+
+    - name: List contents of blob-report directory after download
+      run: ls -R blob-report
+
+
     - name: Merge into HTML Report
       run: npx playwright merge-reports --reporter html blob-report
+
+
+    - name: List contents of playwright-report directory after merging
+      run: ls -R playwright-report
+
+
+    - name: Verify HTML Report
+      run: cat playwright-report/index.html || echo "No index.html found"
+
 
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
         name: html-report--attempt-${{ github.run_attempt }}
-        path: playwright-report/index.html
+        path: playwright-report
         retention-days: 14
+
+
+
 
   re-upload-html-report:
     needs: [merge-reports]
