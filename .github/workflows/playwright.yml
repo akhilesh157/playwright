@@ -24,14 +24,16 @@ jobs:
       run: npm ci
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
+
     - name: Run Playwright tests
-      run: npx playwright test all_tests.spec.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-    - name: Upload test results to GitHub Actions Artifacts
+      run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+
+    - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: blob-report-${{ matrix.shardIndex }}
-        path: ./blob-reports  # Assuming the report.jsonl is generated in the root of the workspace
+        path: ./blob-reports
         retention-days: 1
 
   merge-report:
@@ -43,28 +45,46 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 18
+    
     - name: Clean npm cache
       run: npm cache clean --force
+
     - name: Install Dependencies Again
       run: npm ci
+
     - name: Install Playwright
       run: npx playwright install --with-deps
-    - name: Download test results from GitHub Actions artifacts
+
+    - name: Download blob reports from GitHub Actions artifacts
       uses: actions/download-artifact@v4
       with:
         path: ./blob-reports
         pattern: blob-report-*
         merge-multiple: true
-    - name: List Blob Reports Contents
+
+    - name: List contents of blob-reports
       run: ls -al ./blob-reports
+
+    - name: Extract blob-report ZIP files
+      run: |
+        unzip ./blob-reports/blob-report-1.zip -d ./blob-reports/extracted-report-1
+        unzip ./blob-reports/blob-report-2.zip -d ./blob-reports/extracted-report-2
+        unzip ./blob-reports/blob-report-3.zip -d ./blob-reports/extracted-report-3
+        unzip ./blob-reports/blob-report-4.zip -d ./blob-reports/extracted-report-4
+
+    - name: List contents of extracted directories
+      run: |
+        ls -al ./blob-reports/extracted-report-1
+        ls -al ./blob-reports/extracted-report-2
+        ls -al ./blob-reports/extracted-report-3
+        ls -al ./blob-reports/extracted-report-4
+
     - name: Merge into HTML reports
-      run: npx playwright merge-reports --reporter=html ./blob-reports
+      run: npx playwright merge-reports --reporter=html --output=playwright-report ./blob-reports
+
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
         name: html-report--attempt-${{ github.run_attempt }}
         path: playwright-report
         retention-days: 10
-    - name: Output npm debug log
-      if: failure()
-      run: cat /home/runner/.npm/_logs/*.log
