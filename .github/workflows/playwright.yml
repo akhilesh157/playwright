@@ -25,7 +25,7 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      run: npx playwright test all_tests.spec.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
     - name: Upload test results to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
