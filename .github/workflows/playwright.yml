@@ -54,7 +54,7 @@ jobs:
         path: blob-report
         pattern: blob-report-*
         merge-multiple: true
-    - name: List contents of blob-report directory before merging
+    - name: List contents of blob-report directory after download
       run: ls -R blob-report
     - name: Merge into HTML Report
       run: npx playwright merge-reports --reporter html blob-report
