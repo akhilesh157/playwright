@@ -71,7 +71,8 @@ jobs:
     - name: Merge into HTML Report
       run: |
         mkdir -p playwright-report
-        npx playwright merge-reports --reporter html blob-report --output playwright-report/index.html
+        npx playwright merge-reports --reporter html blob-report
+        mv ./playwright-report/* ./playwright-report/
 
 
     - name: List contents of playwright-report directory after merging
