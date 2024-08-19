@@ -5,7 +5,7 @@ test("1-title_check",async({page})=>{
     await expect(page).toHaveTitle("Online Shop Demo – Demo Site")
 })
 
-test('2-url_check',async({page})=>{
+test('url_check',async({page})=>{
     await page.goto("https://www.onlineshopdemo.co.uk/");
     const login_page=await page.getByRole('link', { name: 'Login' })
     await login_page.click()
