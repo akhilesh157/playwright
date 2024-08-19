@@ -57,7 +57,7 @@ test('7-product-check',async({page})=>{
     await page.goto("https://www.onlineshopdemo.co.uk/product-tag/sale/")
     await page.locator('.jet-woo-product-thumbs__inner').nth(0).click();
     await page.locator('#pa_color').selectOption({index:1});
-    await page.locator('#pa_size').clickgi();
+    await page.locator('#pa_size').click();
     await page.locator('#pa_size').selectOption({index:1});
     await page.getByRole('button', { name: 'Add to basket' }).click()
     const confirmtext=page.getByText('“Cateye sunglasses” has been added to your basket.');
