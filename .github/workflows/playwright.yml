@@ -61,6 +61,7 @@ jobs:
       with:
         name: blob-report
         path: blob-report-*
+        merge-multiple: true
 
 
     - name: List contents of blob-report directory after download
