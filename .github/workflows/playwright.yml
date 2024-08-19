@@ -64,5 +64,27 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: html-report--attempt-${{ github.run_attempt }}
-        path: playwright-report
+        path: playwright-report/index.html
+        retention-days: 14
+
+  re-upload-html-report:
+    needs: [merge-reports]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: Download HTML Report Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: downloaded-html-report
+    - name: List contents of downloaded-html-report directory
+      run: ls -R downloaded-html-report
+    - name: Re-upload HTML Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: re-uploaded-html-report
+        path: downloaded-html-report/index.html
         retention-days: 14
