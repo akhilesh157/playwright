@@ -54,3 +54,41 @@ test("yt-video",async({page})=>{
 //   await page.goto('https://wipro.techademy.com/login');
 //   await expect(page.locator('text=Forgot Password')).toBeVisible({ timeout: 30000 }); // Expect timeout of 10 seconds.
 // });
+
+// @ts-check
+
+const { test, expect } = require('@playwright/test');
+
+test('has title', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/.*playwright/i);
+});
+
+test('get started link', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  // Click the get started link.
+  await page.getByRole('link', { name: 'Get started' }).click();
+
+  // Expects page to have a heading with the name of Installation.
+  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+});
+
+
+
+// filtering the locators (drill inside the DOM)
+// test('filtering', async ({page}) => {
+//   await page.goto("");
+//   await page.getByRole("listitem")
+//     .filter({ hasText: 'Product 2' })
+//     .getByRole('button', {name: "Add to cart"})
+//     .click()
+// });
+// test('stock items 5', async ({page}) => {
+//   await page.goto("");
+//   await expect(page.getByRole("listitem")
+//     .filter({ hasNotText: 'Out of stock' }))
+//     .toHaveCount(5)
+// })

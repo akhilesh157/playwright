@@ -9,11 +9,9 @@ test("checking",async({page})=>{
 }
 )
 */
-// const { test, expect } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
-// test("hello", async ({ page }) => {
-//   await page.goto("https://www.youtube.com/");
-//   await expect(page).toHaveTitle("YouTube");
-//   });
-
-  
+test("hello", async ({ page }) => {
+  await page.goto("https://www.youtube.com/");
+  await expect(page).toHaveTitle("YouTube");
+  });
