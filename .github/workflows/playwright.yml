@@ -58,7 +58,7 @@ jobs:
     - name: List Blob Reports Contents
       run: ls -al ./blob-reports
     - name: Merge into HTML reports
-      run: npx playwright merge-reports --reporter=html --output=playwright-report ./blob-reports
+      run: npx playwright merge-reports --reporter=html ./blob-reports
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
