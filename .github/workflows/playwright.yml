@@ -46,7 +46,6 @@ jobs:
       with:
         node-version: 18
     
-    # Ensure a clean npm environment
     - name: Clean npm cache
       run: npm cache clean --force
 
@@ -63,19 +62,12 @@ jobs:
         pattern: blob-report-*
         merge-multiple: true
 
-    # Verify Playwright Installation
-    - name: Verify Playwright Installation
-      run: npx playwright --version
-
-    # Debugging: List Directory Contents
-    - name: List Directory Contents
+    - name: List Blob Reports Contents
       run: ls -al ./blob-reports
-    
-    # Merge Reports into HTML
-    - name: Merge into HTML reports
-      run: npx playwright merge-reports --reporter=html ./blob-reports
 
-    # Upload HTML Report
+    - name: Merge into HTML reports
+      run: npx playwright merge-reports --reporter=html --output=playwright-report ./blob-reports
+
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
@@ -83,7 +75,6 @@ jobs:
         path: playwright-report
         retention-days: 10
 
-    # Output npm debug log if errors occur
     - name: Output npm debug log
       if: failure()
       run: cat /home/runner/.npm/_logs/*.log
