@@ -27,6 +27,7 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
+
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
@@ -58,8 +59,8 @@ jobs:
     - name: Download blob reports from GitHub Actions Artifacts
       uses: actions/download-artifact@v4
       with:
-        name: blob-report
-        path: blob-report-*
+        path: blob-report
+        pattern: blob-report-*
         merge-multiple: true
 
 
@@ -70,18 +71,18 @@ jobs:
     - name: Merge into HTML Report
       run: npx playwright merge-reports --reporter html blob-report
 
+
     - name: List contents of playwright-report directory after merging
       run: ls -R playwright-report
+
+
+    - name: Verify HTML Report
+      run: cat playwright-report/index.html || echo "No index.html found"
 
 
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       with:
-        name: html-report
+        name: html-report--attempt-${{ github.run_attempt }}
         path: playwright-report
         retention-days: 14
-
-
-
-
-
