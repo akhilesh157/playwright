@@ -27,7 +27,6 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
-
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
